@@ -1,3 +1,6 @@
+To create the Time Table in Power Query, add a blank query, copy and paste the code below. Make sure to edit the date ranges.
+
+
 let      /* TimeKey formula to add to main(eg; Sales) =Table Time.Hour([OrderAt Date]) * 60 + Time.Minute([OrderAt Date]) */
     Source = List.Numbers( 0, 1440),
     ConvertedtoTable = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
