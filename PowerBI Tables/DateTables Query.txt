@@ -1,7 +1,7 @@
  To create the Date Table in Power Query, add a blank query, copy and paste the code below. Make sure to edit the date ranges.
 
 
-let   /* Edit this to meet your dates in your data -StartDate(YYYY,M,D)          EndDate - StartDate         DHMS  */
+let   /* Edit this to meet your dates in your data -StartDate(YYYY,M,D)          EndDate - StartDate   Day,Hour,Min,Seconds  */
     Source = List.Dates( #date(2021, 1, 1),  Number.From(#date(2021,12,31) - #date(2021,1,1)) + 1, #duration(1,0,0,0)),
     #"Converted to Table" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
     #"Renamed Columns" = Table.RenameColumns(#"Converted to Table",{{"Column1", "Date"}}),
