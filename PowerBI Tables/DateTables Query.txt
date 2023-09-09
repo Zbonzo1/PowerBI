@@ -1,0 +1,14 @@
+let   /* Edit this to meet your dates in your data -StartDate(YYYY,M,D)          EndDate - StartDate         DHMS  */
+    Source = List.Dates( #date(2021, 1, 1),  Number.From(#date(2021,12,31) - #date(2021,1,1)) + 1, #duration(1,0,0,0)),
+    #"Converted to Table" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+    #"Renamed Columns" = Table.RenameColumns(#"Converted to Table",{{"Column1", "Date"}}),
+    #"Inserted Year" = Table.AddColumn(#"Renamed Columns", "Year", each Date.Year([Date]), Int64.Type),
+    #"Inserted Month Name" = Table.AddColumn(#"Inserted Year", "Month", each Date.ToText([Date], "MMM"), type text),
+    #"Inserted Month" = Table.AddColumn(#"Inserted Month Name", "MonthNum", each Date.Month([Date]), Int64.Type),
+    #"Inserted WeekDayNum" = Table.AddColumn(#"Inserted Month", "WeekDayNum", each Date.DayOfWeek([Date], 1)+1, Int64.Type),
+    #"Inserted WeekDay" = Table.AddColumn(#"Inserted WeekDayNum", "WeekDay", each Date.DayOfWeekName([Date]), type text),
+    #"Inserted Quarter" = Table.AddColumn(#"Inserted WeekDay", "Quarter", each "Q" & Text.From(Date.QuarterOfYear([Date])), type text),
+    #"Inserted MonthYear" = Table.AddColumn(#"Inserted Quarter", "MonthYear", each Date.EndOfMonth([Date]), type date),
+    #"Changed Type" = Table.TransformColumnTypes(#"Inserted MonthYear",{{"Date", type date}})
+in
+    #"Changed Type"
